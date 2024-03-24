@@ -1,31 +1,46 @@
-import { StyleSheet } from 'react-native';
+import { StatusBar, SafeAreaView, ScrollView } from "react-native";
+import CategorySection from "@/components/home/CategorySection";
+import ChartSection from "@/components/home/ChartSection";
+import HeaderSection from "@/components/home/HeaderSection";
+import { atom, useAtom, useSetAtom } from "jotai";
+import { useQuery } from "@tanstack/react-query";
+import FirebaseRepository from "@/controllers/firebase.controllers";
+import { Text, View } from "@/components/Themed";
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+export const connectionAtom = atom("OFF");
+export const categoryAtom = atom("Temperature");
 
-export default function TabOneScreen() {
+export default function RootScreen() {
+  const [_, setConnection] = useAtom(connectionAtom);
+
+  const connectionQuery = useQuery({
+    queryFn: async () => {
+      const repository = new FirebaseRepository();
+      const result = await repository.read("connection");
+      setConnection(result);
+      return result;
+    },
+    queryKey: ["connection"],
+    refetchInterval: 500,
+  });
+
+  if (connectionQuery.isLoading)
+    return (
+      <View>
+        <Text>Loading</Text>
+      </View>
+    );
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
-    </View>
+    <SafeAreaView className="h-screen w-screen bg-white">
+      <StatusBar
+        backgroundColor="black"
+        barStyle="default"
+        showHideTransition="fade"
+      />
+      <HeaderSection />
+      <ChartSection />
+      <CategorySection />
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
