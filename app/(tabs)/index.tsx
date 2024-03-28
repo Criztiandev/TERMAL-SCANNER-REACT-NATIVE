@@ -20,7 +20,7 @@ export default function RootScreen() {
       setConnection(result);
       return result;
     },
-    queryKey: ["connection"],
+    queryKey: [""],
     refetchInterval: 500,
   });
 

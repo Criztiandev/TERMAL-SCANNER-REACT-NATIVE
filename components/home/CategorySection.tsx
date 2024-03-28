@@ -47,9 +47,9 @@ export default function CategorySection() {
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => toggleSelectCategory(item.title)}
-            className="flex-1 h-[150px] ">
+            className="flex-1 h-[130px] ">
             <View
-              className={`flex-1 w-[150px] h-full rounded-[5px] p-2 justify-center items-center ${
+              className={`flex-1  h-full rounded-[5px] p-2 justify-center items-center ${
                 category === item.title
                   ? "opacity-100 bg-gray-50 border-2 border-gray-400"
                   : "opacity-50"

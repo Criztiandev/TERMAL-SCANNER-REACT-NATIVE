@@ -1,5 +1,12 @@
 import { db } from "@/config/config";
-import { Database, ref, onValue, DataSnapshot } from "firebase/database";
+import {
+  Database,
+  ref,
+  onValue,
+  DataSnapshot,
+  update as FirebaseUpdate,
+  update,
+} from "firebase/database";
 
 export default class FirebaseRepository {
   private db: Database;
@@ -30,8 +37,9 @@ export default class FirebaseRepository {
     // Implement the create method
   }
 
-  update() {
-    // Implement the update method
+  update(route: string, payload: any) {
+    const starCountRef = ref(this.db, route);
+    return update(starCountRef, payload);
   }
 
   delete() {
