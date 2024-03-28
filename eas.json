@@ -3,6 +3,15 @@
     "version": ">= 7.3.0"
   },
   "build": {
+    "production": {
+      "android": {
+        "image": "latest"
+      },
+      "ios": {
+        "image": "latest"
+      }
+    },
+
     "preview": {
       "android": {
         "buildType": "apk"
@@ -18,8 +27,7 @@
     },
     "preview4": {
       "distribution": "internal"
-    },
-    "production": {}
+    }
   },
   "submit": {
     "production": {}
