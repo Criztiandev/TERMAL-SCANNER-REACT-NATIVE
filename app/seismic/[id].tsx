@@ -9,14 +9,14 @@ import { categoryAtom, connectionAtom } from "../(tabs)";
 import { getCurrentDay } from "@/utils/date.utils";
 
 const chartConfig = {
-  color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`, // White color for lines
-  labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`, // White color for labels
-  strokeWidth: 1, // optional, default 3
+  color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+  labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+  strokeWidth: 1,
   barPercentage: 0.5,
-  decimalPlaces: 2, // optional, defaults to 2dp
+  decimalPlaces: 2,
   style: {
     borderRadius: 16,
-    backgroundColor: "#000", // Black background color
+    backgroundColor: "#000",
   },
 };
 
@@ -31,12 +31,13 @@ export default function DetailScreen() {
     queryFn: async () => {
       const respository = new FirebaseRepository();
       const result = await respository.read(
-        `${category.toLowerCase()}/week/${currentDay.toLowerCase()}`
+        `${category.toLowerCase()}/week/Thursday
+        }`
       );
 
       setCurrentData((prevNumbers: Array<number>) => {
         const newNumbers = prevNumbers.map((number: number) => {
-          return number === null ? result : number;
+          return number === null ? result : Number(number);
         });
 
         // Check if all slots are filled with actual data

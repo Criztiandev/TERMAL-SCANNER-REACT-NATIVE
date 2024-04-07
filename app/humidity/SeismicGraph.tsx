@@ -138,7 +138,7 @@ const TimerDeactivation = () => {
       className="flex-1  border rounded-md"
       onPress={showTimepicker}>
       <View className="h-full flex justify-center items-center overflow-hidden">
-        <Text className="text-[18px] font-bold">{formattedDate}</Text>
+        <Text className="text-[18px] font-bold">6:00 PM</Text>
       </View>
     </TouchableOpacity>
   );
@@ -153,13 +153,11 @@ const DetailScreen = () => {
   useQuery({
     queryFn: async () => {
       const respository = new FirebaseRepository();
-      const result = await respository.read(
-        `humidity/week/${currentDay.toLowerCase()}`
-      );
+      const result = await respository.read(`humidity/week/${currentDay}`);
 
       setCurrentData((prevNumbers) => {
         const newNumbers = prevNumbers.map((number) =>
-          number === null ? result : number
+          number === null ? result : Number(number)
         );
 
         const allFilled = newNumbers.every((number) => number !== null);
@@ -187,7 +185,7 @@ const DetailScreen = () => {
   }, [activation]);
 
   const data = {
-    datasets: [{ data: currentData }, { data: [1] }, { data: [20] }],
+    datasets: [{ data: currentData }, { data: [1] }, { data: [100] }],
   };
 
   return (

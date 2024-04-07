@@ -4,6 +4,20 @@ import { Link } from "expo-router";
 import { TouchableOpacity } from "react-native";
 
 export default function AboutScreen() {
+  const DeveloperDetails = [
+    {
+      id: 0,
+      cover: require("@/assets/images/ian_pfp.jpg"),
+      fullName: "Marc Ian Fuentes",
+    },
+
+    {
+      id: 1,
+      cover: require("@/assets/images/james_pfp.jpg"),
+      fullName: "James Michael Ricare",
+    },
+  ];
+
   return (
     <View style={{ backgroundColor: "white", height: "100%", padding: 16 }}>
       <Text
@@ -17,8 +31,15 @@ export default function AboutScreen() {
         About us
       </Text>
 
-      <InfoCard name="Marc Ian Fuentes" course="BS-CompEng" />
-      <InfoCard name="James Michael Ricare" course="BS-CompEng" />
+      {DeveloperDetails?.map((cards) => (
+        <InfoCard
+          id={cards.id}
+          key={cards.fullName}
+          name={cards.fullName}
+          cover={cards.cover}
+          course="BS-CompEng"
+        />
+      ))}
     </View>
   );
 }

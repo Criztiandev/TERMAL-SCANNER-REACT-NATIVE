@@ -2,41 +2,24 @@ import { Text, View } from "@/components/Themed";
 import { Link } from "expo-router";
 import { TouchableOpacity, StyleSheet, Image } from "react-native";
 
-const InfoCard = ({ name, course }: { name: string; course: string }) => {
-  const developerID = {
-    "Marc Ian Fuentes": {
-      id: 0,
-      cover: require("@/assets/images/ian_pfp.jpg"),
-    },
-    "James Michael Ricare": {
-      "Marc Ian Fuentes": {
-        id: 1,
-        cover: require("@/assets/images/james_pfp.jpg"),
-      },
-    },
-  };
-
+const InfoCard = ({
+  id,
+  name,
+  cover,
+  course,
+}: {
+  id: number;
+  name: string;
+  cover: string;
+  course: string;
+}) => {
   return (
-    <Link
-      href={`/info/${
-        (
-          developerID[
-            (name as keyof typeof developerID) || "Marc Ian Fuentes"
-          ] as any
-        ).id
-      }`}
-      asChild>
+    <Link href={`/info/${id}`} asChild>
       <TouchableOpacity>
         <View style={style.card}>
           <View style={coverStyle.cover}>
             <Image
-              source={
-                (
-                  developerID[
-                    (name as keyof typeof developerID) || "Marc Ian Fuentes"
-                  ] as any
-                ).cover
-              }
+              source={cover || require("@/assets/images/james_pfp.jpg")}
               style={coverStyle.cover}
             />
           </View>

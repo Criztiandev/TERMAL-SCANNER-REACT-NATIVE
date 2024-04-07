@@ -44,10 +44,11 @@ export default function ChartSection() {
       const route =
         currentCategory === "Air Humidity" ? "humidity" : currentCategory;
       const result = await respository.read(`${route.toLowerCase()}/week`);
-      return days.map((day) => result[day.toLowerCase()]);
+      const final = days.map((day) => Number(result[day]));
+      return final;
     },
 
-    queryKey: ["weeks"],
+    queryKey: [`${currentCategory}-payload`],
     enabled: connection === "OFF" ? false : true,
     retry: currentCategory === "Timer" ? false : true,
     refetchInterval: currentCategory === "Timer" ? false : false,
@@ -55,11 +56,13 @@ export default function ChartSection() {
 
   const data = {
     labels: ["Mon", "Tue", "Wed", "Thurs", "Fri", "Sat", "Sun"],
-    datasets: [{ data: weekQuery?.data || [0, 0, 0, 0, 0, 0], strokeWidth: 2 }],
+    datasets: [
+      { data: weekQuery?.data || [0, 0, 0, 0, 0, 0], strokeWidth: 2 },
+      { data: [1] },
+      { data: [100] },
+    ],
     legend: ["Result"], // optional
   };
-
-  console.log(currentCategory);
 
   return (
     <View className="">

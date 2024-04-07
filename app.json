@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Rake Bot Machine",
-    "slug": "RakeBotMachine",
+    "name": "Termial-Detector",
+    "slug": "Termial-Detector",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -21,7 +21,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.debesmscat.andriodrakebotmachine"
+      "package": "com.randomthing.andriodappngpogi"
     },
     "web": {
       "bundler": "metro",

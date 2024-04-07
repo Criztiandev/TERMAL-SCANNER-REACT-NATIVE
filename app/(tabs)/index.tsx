@@ -1,16 +1,23 @@
-import { StatusBar, SafeAreaView, ScrollView } from "react-native";
+import {
+  StatusBar,
+  SafeAreaView,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
 import CategorySection from "@/components/home/CategorySection";
 import ChartSection from "@/components/home/ChartSection";
-import HeaderSection from "@/components/home/HeaderSection";
-import { atom, useAtom, useSetAtom } from "jotai";
+import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useQuery } from "@tanstack/react-query";
 import FirebaseRepository from "@/controllers/firebase.controllers";
 import { Text, View } from "@/components/Themed";
+import HeaderSection from "@/components/home/HeaderSection";
+import Timer from "@/components/home/Timer";
 
 export const connectionAtom = atom("OFF");
 export const categoryAtom = atom("Temperature");
 
 export default function RootScreen() {
+  const currentCategory = useAtomValue(categoryAtom);
   const [_, setConnection] = useAtom(connectionAtom);
 
   const connectionQuery = useQuery({
@@ -26,8 +33,9 @@ export default function RootScreen() {
 
   if (connectionQuery.isLoading)
     return (
-      <View>
-        <Text>Loading</Text>
+      <View className="w-full h-full flex justify-center items-center">
+        <ActivityIndicator />
+        <Text className="">Loading.....</Text>
       </View>
     );
 
@@ -39,7 +47,7 @@ export default function RootScreen() {
         showHideTransition="fade"
       />
       <HeaderSection />
-      <ChartSection />
+      {currentCategory === "Timer" ? <Timer /> : <ChartSection />}
       <CategorySection />
     </SafeAreaView>
   );

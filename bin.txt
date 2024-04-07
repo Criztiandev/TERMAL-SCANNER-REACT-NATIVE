@@ -1,0 +1,125 @@
+#include <ESP8266WiFi.h>
+#include <FirebaseArduino.h>
+
+const char* WIFI_SSID = "vivo Y22s";
+const char* WIFI_PASSWORD = "1234567890123";
+const char* FIREBASE_HOST = "test-4a784-default-rtdb.firebaseio.com";
+const char* FIREBASE_AUTH = "R6YQmoNrOZwXpnhqjDPpG5KFM9eCFqu3zfVYl705";
+
+String receivedData; // Variable to store received data
+void setup(void) { 
+
+  Serial.begin(9600);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  Serial.print("Connecting:");
+
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Firebase.begin(FIREBASE_HOST,FIREBASE_AUTH);
+  if(Firebase.success()){
+    Firebase.setString("connection", "ON");
+    Firebase.setInt("duration",0);
+
+    // Modules timer
+    Firebase.setBool("humidity/active",false);
+    Firebase.setString("humidity/timer","6:00PM");
+    Firebase.setInt("humidity/week/monday",0);
+    Firebase.setInt("humidity/week/tuesday",0);
+    Firebase.setInt("humidity/week/wednesday",0);
+    Firebase.setInt("humidity/week/thursday",0);
+    Firebase.setInt("humidity/week/friday",0);
+    Firebase.setInt("humidity/week/saturday",0);
+    Firebase.setInt("humidity/week/sunday",0);
+
+    // Moisture
+       Firebase.setBool("moisture/active",false);
+    Firebase.setString("moisture/timer","6:00PM");
+    Firebase.setInt("moisture/week/monday",0);
+    Firebase.setInt("moisture/week/tuesday",0);
+    Firebase.setInt("moisture/week/wednesday",0);
+    Firebase.setInt("moisture/week/thursday",0);
+    Firebase.setInt("moisture/week/friday",0);
+    Firebase.setInt("moisture/week/saturday",0);
+    Firebase.setInt("moisture/week/sunday",0);
+
+    // Temperature
+        Firebase.setBool("temperature/active",false);
+    Firebase.setString("temperature/timer","6:00PM");
+    Firebase.setInt("temperature/week/monday",0);
+    Firebase.setInt("temperature/week/tuesday",0);
+    Firebase.setInt("temperature/week/wednesday",0);
+    Firebase.setInt("temperature/week/thursday",0);
+    Firebase.setInt("temperature/week/friday",0);
+    Firebase.setInt("temperature/week/saturday",0);
+    Firebase.setInt("temperature/week/sunday",0);
+  }
+ 
+}
+
+void loop() {
+  firebaseReconnect();
+  Serial.println("Test");
+
+    while (Serial.available() > 0) { // Check if data is available to read
+    char receivedChar = Serial.read(); // Read a character
+    Serial.println(receivedChar);
+    if (receivedChar == '\n') { // Check if it's the end of the line
+      processReceivedData(receivedData); // Process the received data
+      receivedData = ""; // Clear the received data variable
+    } else {
+      receivedData += receivedChar; // Add the character to the received data
+    }
+  }
+
+  // String ledStatus = Firebase.getString("LED_STATUS");
+  // float humidty = dht.readHumidity();
+
+
+  // float temperature = dht.readTemperature();         
+  // if (isnan(humidty) || isnan(temperature)) {
+  //   Serial.println("Failed to read from DHT sensor!");
+  // } else {
+
+  //   if(ledStatus == "ON"){
+  //     Serial.println("Status: ON");
+  //     Firebase.setInt("Humidity", humidty);
+  //     Firebase.setInt("Temperature", temperature);
+  //      digitalWrite(ledPin, HIGH);         
+  //   }else if (ledStatus == "OFF"){
+  //     Serial.println("Status: OFF");
+  //     Firebase.setInt("Humidity", 0);
+  //     Firebase.setInt("Temperature", 0);
+  //      digitalWrite(ledPin, LOW); 
+  //   }else{
+  //     Serial.println("Something went wrong, Please try again");
+  //   }
+     
+  // }
+  // delay(2000); // Delay between readings
+}
+
+
+void firebaseReconnect(){
+  if(Firebase.failed()){
+     Serial.println("Firebase Reconnecting....... ♻");
+     Firebase.begin(FIREBASE_HOST,FIREBASE_AUTH);
+  }
+}
+
+
+void processReceivedData(String data) {
+  if (data.startsWith("H")) { // Check if the data starts with "H" (humidity data)
+    data.remove(0, 1); // Remove the prefix "H"
+    float humidityValue = data.toFloat(); // Convert the data to float
+    Serial.print("Received humidity: ");
+    Serial.println(humidityValue); // Print the received humidity value
+
+    // Here you can add your Firebase operation to store the received humidity value
+  }
+}
+
+

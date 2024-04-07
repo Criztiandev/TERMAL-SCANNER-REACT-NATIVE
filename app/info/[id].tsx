@@ -28,6 +28,7 @@ const DeveloperDetails = [
 
 export default function DetailScreen() {
   const { id } = useRoute().params as { id: string };
+  console.log(useRoute().params);
   const currentDeveloper = DeveloperDetails[id as any];
   return (
     <SafeAreaView

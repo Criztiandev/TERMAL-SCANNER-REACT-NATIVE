@@ -47,7 +47,7 @@ const Activation = () => {
   useQuery({
     queryFn: async () => {
       if (connection === "OFF") return false;
-      const result = await repository.read("temperature/active");
+      const result = await repository.read("temperature/timer");
       setIsActive(result);
       return result;
     },
@@ -137,7 +137,7 @@ const TimerDeactivation = () => {
       className="flex-1  border rounded-md"
       onPress={showTimepicker}>
       <View className="h-full flex justify-center items-center overflow-hidden">
-        <Text className="text-[18px] font-bold">{formattedDate}</Text>
+        <Text className="text-[18px] font-bold">6:00 PM</Text>
       </View>
     </TouchableOpacity>
   );
@@ -149,16 +149,14 @@ const DetailScreen = () => {
   const currentDay = getCurrentDay();
   const connection = useAtomValue(connectionAtom);
 
-  useQuery({
+  const currentNumber = useQuery({
     queryFn: async () => {
       const respository = new FirebaseRepository();
-      const result = await respository.read(
-        `temperature/week/${currentDay.toLowerCase()}`
-      );
-
+      const result = await respository.read(`temperature/week/${currentDay}`);
+      console.log("Fucking Result", result);
       setCurrentData((prevNumbers) => {
         const newNumbers = prevNumbers.map((number) =>
-          number === null ? result : number
+          number === null ? result : Number(number)
         );
 
         const allFilled = newNumbers.every((number) => number !== null);
@@ -186,7 +184,7 @@ const DetailScreen = () => {
   }, [activation]);
 
   const data = {
-    datasets: [{ data: currentData }, { data: [1] }, { data: [20] }],
+    datasets: [{ data: currentData }, { data: [1] }, { data: [100] }],
   };
 
   return (
@@ -194,6 +192,16 @@ const DetailScreen = () => {
       <Text className="text-bold text-[24px] font-bold  text-center my-4">
         Temperature
       </Text>
+      <View
+        className={`${
+          activation === true && connection === "ON"
+            ? "bg-green-200 border border-green-400"
+            : "bg-red-200 border border-red-400"
+        } px-4 py-1 rounded-full mr-4 min-w-[100px] justify-center items-center mx-auto `}>
+        <Text className={`font-bold text-[18px] `}>
+          {Number(currentNumber.data)}
+        </Text>
+      </View>
 
       <View className="p-4 rounded-md overflow-hidden">
         <LineChart
